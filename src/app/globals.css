@@ -1,0 +1,263 @@
+/* ------------------------------------------------------------------
+   map — everything at ethanyanxu.com
+   Paper, ink, one red. Nineteen words and whether they answer.
+   ------------------------------------------------------------------ */
+
+:root {
+  --paper: #efeae0;
+  --ink: #1b1a17;
+  --ink-50: rgba(27, 26, 23, 0.5);
+  --ink-30: rgba(27, 26, 23, 0.3);
+  --ink-15: rgba(27, 26, 23, 0.15);
+  --red: #a8412b;
+
+  --serif: var(--font-serif), "Iowan Old Style", Palatino, Georgia, serif;
+  --mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* the one measure everything is built from */
+  --unit: clamp(0.58rem, 1.35vw, 1rem);
+  --gutter: clamp(1.5rem, 6vw, 5.5rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #15140f;
+    --ink: #e9e2d2;
+    --ink-50: rgba(233, 226, 210, 0.48);
+    --ink-30: rgba(233, 226, 210, 0.28);
+    --ink-15: rgba(233, 226, 210, 0.14);
+    --red: #cd6c4d;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Paper grain — the reason this doesn't look plastic. Sits above the
+   background colour so each theme can carry its own amount of tooth. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  body::before {
+    opacity: 0.16;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--red);
+  color: var(--paper);
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --- shell ------------------------------------------------------- */
+
+.shell {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0 var(--gutter) clamp(4rem, 12vw, 9rem);
+}
+
+/* --- masthead ---------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: clamp(2.5rem, 8vw, 5rem) 0 clamp(3.5rem, 12vw, 8rem);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+}
+
+.masthead h1 {
+  margin: 0;
+  font: inherit;
+  color: var(--ink);
+}
+
+/* --- the list ---------------------------------------------------- */
+
+.register {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.entry {
+  margin-left: calc(var(--i) * var(--unit));
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--unit) * 1.4);
+}
+
+.entry__link {
+  display: inline-block;
+  font-size: calc(var(--s) * var(--unit));
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  padding: calc(var(--unit) * 0.16) 0;
+  transition: color 160ms linear;
+}
+
+.entry__link--italic {
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+
+.entry__link:hover,
+.entry__link:focus-visible {
+  color: var(--red);
+}
+
+/* The tracker is the word itself: solid means it answered, struck through
+   means it didn't, faint means we're still asking. No extra marks. */
+
+.entry__link.is-waiting {
+  color: var(--ink-15);
+  animation: breathe 1.8s ease-in-out infinite;
+}
+
+.entry__link.is-down {
+  color: var(--ink-30);
+  text-decoration: line-through;
+  text-decoration-color: var(--red);
+  text-decoration-thickness: 1px;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* latency, only when you go looking for it */
+
+.entry__ms {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-30);
+  opacity: 0;
+  transition: opacity 200ms linear;
+}
+
+.entry:hover .entry__ms,
+.entry:focus-within .entry__ms {
+  opacity: 1;
+}
+
+/* --- colophon ---------------------------------------------------- */
+
+.colophon {
+  display: flex;
+  gap: 1.5rem;
+  align-items: baseline;
+  margin-top: clamp(3.5rem, 12vw, 8rem);
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--ink-15);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-30);
+}
+
+.colophon span:last-child {
+  margin-left: auto;
+}
+
+.recheck {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--ink-30);
+  cursor: pointer;
+  transition: color 140ms linear;
+}
+
+.recheck:hover:not(:disabled) {
+  color: var(--red);
+}
+
+.recheck:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 1px solid var(--red);
+  outline-offset: 4px;
+}
+
+/* --- narrow ------------------------------------------------------ */
+
+@media (max-width: 640px) {
+  .entry {
+    /* keep the rag, but stop it running off the page */
+    margin-left: calc(var(--i) * var(--unit) * 0.45);
+  }
+
+  .entry__ms {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
