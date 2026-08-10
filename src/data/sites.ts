@@ -37,6 +37,7 @@ export const sites: Site[] = [
   { host: "dashboard.ethanyanxu.com", label: "dashboard", size: 2.1, indent: 14 },
   { host: "finprint.ethanyanxu.com", label: "finprint", size: 3.2, indent: 0, italic: true },
   { host: "orgchem.ethanyanxu.com", label: "orgchem", size: 2.4, indent: 8 },
+  { host: "visualizer.ethanyanxu.com", label: "visualizer", size: 2.7, indent: 16 },
   { host: "gentoo.ethanyanxu.com", label: "gentoo", size: 4.2, indent: 2 },
   { host: "beta.gentoo.ethanyanxu.com", label: "beta.gentoo", size: 1.9, indent: 22, italic: true },
 ];
