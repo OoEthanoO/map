@@ -57,7 +57,7 @@ runs the tests and production build, starts an isolated release and verifies
 `/api/health` before switching Caddy. Previous releases and immutable assets are
 retained. Commit and push changes to `main` to deploy them.
 
-For setup or repair, run on finprint-host in an administrator PowerShell:
+For an existing installation, run on finprint-host in an administrator PowerShell:
 
 ```powershell
 & C:\ProgramData\Map\repo\deploy\windows\install.ps1 `
@@ -67,6 +67,10 @@ For setup or repair, run on finprint-host in an administrator PowerShell:
 & C:\ProgramData\Map\ops\sync-domains.ps1
 & C:\ProgramData\Map\ops\deploy.ps1
 ```
+
+On first installation, invoke `install.ps1` without `-EnableAutoDeploy`, deploy
+and verify a release, then invoke the installer again with `-EnableAutoDeploy`.
+Run `dns.ps1` only after the initial release is healthy.
 
 `deploy/windows/dns.ps1` creates only the map CNAME after readiness succeeds and
 stores a narrowly scoped rollback record. `dns.ps1 -Rollback` removes that
