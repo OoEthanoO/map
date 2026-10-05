@@ -28,4 +28,12 @@ if ($EnableAutoDeploy) {
         -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
     Register-ScheduledTask -TaskName 'map-deploy' -Action $action -Trigger $triggers -Settings $settings -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
 }
+# Refresh the public host inventory independently of releases, using the existing
+# machine-protected DNS credential. The web process never receives the credential.
+$inventoryScript = Join-Path $ops 'sync-domains.ps1'
+& $inventoryScript -Root $Root
+$inventoryAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ('-NoProfile -NonInteractive -ExecutionPolicy Bypass -File "{0}" -Root "{1}"' -f $inventoryScript,$Root)
+$inventoryTriggers = @((New-ScheduledTaskTrigger -AtStartup), (New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5) -RepetitionInterval (New-TimeSpan -Minutes 5)))
+$inventorySettings = New-ScheduledTaskSettingsSet -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 4) -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+Register-ScheduledTask -TaskName 'map-domain-sync' -Action $inventoryAction -Trigger $inventoryTriggers -Settings $inventorySettings -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
 Write-Output "Runtime installed at $Root."

@@ -24,6 +24,7 @@ try {
     $env:NODE_ENV = 'development'
     Set-Location $repo
     Invoke-Tool $config.npm @('ci','--include=dev','--no-audit','--no-fund') $log
+    Invoke-Tool $config.npm @('test') $log
     $env:NODE_ENV = 'production'
     Invoke-Tool $config.npm @('run','build') $log
     $releaseId = $commit.Substring(0,12) + '-' + (Get-Date -Format 'yyyyMMddHHmmss')

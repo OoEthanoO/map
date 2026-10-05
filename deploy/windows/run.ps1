@@ -9,6 +9,7 @@ $env:NEXT_TELEMETRY_DISABLED = '1'
 $env:PORT = [string]$Port
 $env:HOSTNAME = '127.0.0.1'
 $env:MAP_COMMIT_SHA = $Commit
+$env:MAP_DOMAINS_FILE = Join-Path $Root 'domains.json'
 $server = Join-Path $Release 'app\server.js'
 $log = Join-Path $Root ('logs\web-' + $Port + '.log')
 Set-Location (Join-Path $Release 'app')
